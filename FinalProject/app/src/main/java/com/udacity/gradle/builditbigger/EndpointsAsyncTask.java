@@ -1,11 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Pair;
-
-import com.alfonso.jokeactivity.JokeActivity;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
@@ -16,10 +11,10 @@ import java.io.IOException;
 
 class EndpointsAsyncTask extends AsyncTask<Void,Void,String> {
     private static MyApi myApiService = null;
-    private Context context;
+    private final ICallback callback;
 
-    public EndpointsAsyncTask(Context context) {
-        this.context = context;
+    public EndpointsAsyncTask(ICallback callback) {
+        this.callback = callback;
         initApyService();
     }
 
@@ -51,10 +46,10 @@ class EndpointsAsyncTask extends AsyncTask<Void,Void,String> {
 
     @Override
     protected void onPostExecute(String s) {
-        if(s != null) {
-            Intent intent = new Intent(context, JokeActivity.class);
-            intent.putExtra(JokeActivity.JOKE_PARAMETER, s);
-            context.startActivity(intent);
-        }
+        callback.postExecute(s);
+    }
+
+    public interface ICallback {
+        void postExecute(String s);
     }
 }

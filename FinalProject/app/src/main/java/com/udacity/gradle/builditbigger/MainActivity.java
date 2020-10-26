@@ -1,8 +1,11 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +13,13 @@ import android.widget.Toast;
 
 import com.alfonso.jokeactivity.JokeActivity;
 import com.alfonso.jokeprovider.Provider;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
+import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
+import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
+
+import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,10 +57,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
-        Intent intent = new Intent(this,JokeActivity.class);
-        intent.putExtra(JokeActivity.JOKE_PARAMETER,jokeProvider.getJoke());
-        startActivity(intent);
+        new EndpointsAsyncTask(this).execute();
     }
-
 
 }
